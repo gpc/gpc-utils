@@ -1,4 +1,4 @@
-A collection of util scripts.
+A collection of groovy scripts that automate/ease the management of the GPC GitHub account.
 
 ## Instructions
 
