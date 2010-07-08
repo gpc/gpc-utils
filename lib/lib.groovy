@@ -12,6 +12,37 @@ die = { msg ->
 	}
 }
 
+readLine = { prompt = null ->
+	if (prompt) {
+		println prompt
+	}
+	def bytes = new ByteArrayOutputStream()
+	def c
+
+	c = System.in.read()
+	while (c != "\n") {
+		bytes.write(c)
+		c = System.in.read()
+	}
+	
+	bytes.toString()
+}
+
+argOrRead = { i, prompt -> 
+	if (args.size() > i) {
+		args[i]
+	} else {
+		readLine(prompt)
+	}	
+}
+
+confirm = { prompt ->
+	def response = readLine("$prompt (enter 'y'):")
+	if (response.toUpperCase() != 'Y') {
+		die("cancelled")
+	}
+}
+
 def passwordFile = new File("data/password")
 if (!passwordFile.exists()) {
 	die("Couldn't find password file, put the GitHub gpc user's password in a file called 'password' in the same dir as this script")
@@ -55,4 +86,19 @@ membersFile.eachLine {
 }
 if (!members) {
 	die("members file is either empty or all comments")
+}
+
+getRepos = { ->
+	def repos = []
+	github.get(path: "repos/show/$username").with {
+		data.repositories.each {
+			def repo = it.name
+			repos << repo
+		}
+	}
+	repos
+}
+
+repoExists = { repo, repos = getRepos() -> 
+	repo.toUpperCase() in repos*.toUpperCase()
 }

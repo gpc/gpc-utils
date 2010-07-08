@@ -2,24 +2,25 @@
 
 evaluate(new File("lib/lib.groovy"))
 
-println "GPC Members (from members file):"
-members.each {
-	println "	- $it"
+def repos = getRepos()
+def reposToGrant = []
+if (args) {
+	args.each {
+		def repo = it.trim()
+		if (!repoExists(repo, repos)) {
+			die("The repo '$repo' does not exist")
+		}
+		reposToGrant << repo
+	}
+} else {
+	reposToGrant.addAll(repos)
 }
+
+println "GPC Members (from members file):"
+members.each { println "	- $it" }
 println ""
 
-
-def repos = []
-println "Getting repository listing…"
-github.get(path: "repos/show/$username").with {
-	data.repositories.each {
-		def repo = it.name
-		repos << repo
-	}
-}
-println "	- done (${repos.size()} repos).\n"
-
-repos.each { repo ->
+reposToGrant.each { repo ->
 	println "Checking repo '$repo'…"
 	def collaborators = []
 	github.get(path: "repos/show/$username/$repo/collaborators").with {
@@ -39,7 +40,7 @@ repos.each { repo ->
 		github.post(path: "repos/collaborators/$repo/remove/$user")
 	}
 
-println "	- done.\n"
+	println "	- done.\n"
 }
 
 println "All done."
