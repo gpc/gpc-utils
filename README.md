@@ -2,9 +2,7 @@ A collection of util scripts.
 
 ## Instructions
 
-You need to create a file named 'password' that contains only the password for the 'gpc' user. The script will read the password from this file. Obviously, do not commit this file (there is an ignore on it)
-
-The 'members' file contains the usernames of the GPC members, one to a line.
+You need to create a file named 'password' in the 'data' directory that contains only the password for the 'gpc' user. The script will read the password from this file. Obviously, do not commit this file (there is an ignore on it)
 
 ## Grant
 
