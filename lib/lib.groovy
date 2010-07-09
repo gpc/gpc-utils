@@ -52,7 +52,7 @@ password = passwordFile.text.trim()
 username = 'gpc'
 userPassBase64 = "$username:$password".toString().bytes.encodeBase64()
 
-github = new RESTClient("http://github.com/api/v2/json/").with {
+github = new RESTClient("https://github.com/api/v2/json/").with {
 	contentType = JSON
 	handler.failure = { resp ->
 		die("GitHub API Failure: ${resp.statusLine}")
